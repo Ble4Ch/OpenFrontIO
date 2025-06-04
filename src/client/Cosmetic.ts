@@ -39,17 +39,9 @@ export class PatternDecoder {
     const byte1 = bytes[1];
     const byte2 = bytes[2];
     this.scale = byte1 & 0x07;
-    const width = (((byte1 >> 3) & 0x1f) | ((byte2 & 0x03) << 5)) - 2;
-    const height = ((byte2 >> 2) & 0x3f) - 2;
 
-    if (height < 1) {
-      throw new Error(
-        `Invalid pattern metadata: scale=${this.scale}, width=${width}, height=${height}. Expected: scale 0–7, width 1–127, height 1–63.`,
-      );
-    }
-
-    this.tileWidth = width;
-    this.tileHeight = height;
+    this.tileWidth = (((byte2 & 0x03) << 5) | ((byte1 >> 3) & 0x1f)) + 2;
+    this.tileHeight = ((byte2 >> 2) & 0x3f) + 2;
     this.dataStart = 3;
     this.bytes = bytes;
   }
