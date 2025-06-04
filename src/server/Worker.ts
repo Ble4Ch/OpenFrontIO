@@ -336,7 +336,6 @@ export function startWorker() {
                 );
                 return;
               }
-              roles = result.player.roles;
             }
 
             // TODO: Validate client settings based on roles
