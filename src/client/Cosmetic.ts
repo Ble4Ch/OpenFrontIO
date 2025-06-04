@@ -3,12 +3,12 @@ import { z } from "zod";
 import rawTerritoryPatterns from "../../resources/cosmetic/cosmetic.json";
 
 export const CosmeticsSchema = z.object({
-  role_group: z.record(z.string(), z.array(z.string())).optional(),
+  role_group: z.record(z.string(), z.string().array()).optional(),
   pattern: z.record(
     z.string(),
     z.object({
       pattern: z.string().base64(),
-      role_group: z.array(z.string()).optional(),
+      role_group: z.string().array().optional(),
     }),
   ),
 });
