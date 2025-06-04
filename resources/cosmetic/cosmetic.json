@@ -17,6 +17,9 @@
     "checkerboard": {
       "pattern": "ARMIpaU="
     },
+    "choco": {
+      "pattern": "AVIoAAABOEAHgkAc+AN/4AMcgAAA"
+    },
     "diagonal": {
       "pattern": "AXE4AQACAAQACAAQACAAQACAAAABAAIABAAIABAAIABAAIA=",
       "role_group": ["donor", "staff"]
