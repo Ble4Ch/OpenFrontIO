@@ -31,6 +31,9 @@ export class TerritoryPatternsModal extends LitElement {
   @state() private hoveredPattern: string | null = null;
   @state() private hoverPosition = { x: 0, y: 0 };
 
+  @state() private keySequence: string[] = [];
+  @state() private showChocoPattern = false;
+
   @state() private roles: string[] = [];
 
   private resizeObserver: ResizeObserver;
@@ -48,6 +51,7 @@ export class TerritoryPatternsModal extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    window.addEventListener("keydown", this.handleKeyDown);
     this.updateComplete.then(() => {
       const containers = this.renderRoot.querySelectorAll(".preview-container");
       containers.forEach((container) => this.resizeObserver.observe(container));
@@ -57,6 +61,7 @@ export class TerritoryPatternsModal extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    window.removeEventListener("keydown", this.handleKeyDown);
     this.resizeObserver.disconnect();
   }
 
@@ -90,6 +95,33 @@ export class TerritoryPatternsModal extends LitElement {
         this.setLockedPatterns([key], reason);
       }
     }
+  }
+
+  private handleKeyDown = (e: KeyboardEvent) => {
+    const key = e.key.toLowerCase();
+    const nextSequence = [...this.keySequence, key].slice(-5);
+    this.keySequence = nextSequence;
+
+    if (nextSequence.join("") === "choco") {
+      this.triggerChocoEasterEgg();
+      this.keySequence = [];
+    }
+  };
+
+  private triggerChocoEasterEgg() {
+    console.log("🍫 Choco pattern unlocked!");
+    this.showChocoPattern = true;
+
+    const popup = document.createElement("div");
+    popup.className = "easter-egg-popup";
+    popup.textContent = "🎉 You unlocked the Choco pattern!";
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+      popup.remove();
+    }, 5000);
+
+    this.requestUpdate();
   }
 
   createRenderRoot() {
@@ -155,6 +187,14 @@ export class TerritoryPatternsModal extends LitElement {
   }
 
   private renderPatternGrid(): TemplateResult {
+    const patterns = territoryPatterns.pattern ?? {};
+
+    const filteredPatterns = this.showChocoPattern
+      ? patterns
+      : Object.fromEntries(
+          Object.entries(patterns).filter(([key]) => key !== "choco"),
+        );
+
     return html`
       <div
         class="flex flex-wrap gap-4 p-2"
@@ -185,8 +225,8 @@ export class TerritoryPatternsModal extends LitElement {
             ${this.renderBlankPreview(this.buttonWidth, this.buttonWidth)}
           </div>
         </button>
-        ${Object.entries(territoryPatterns.pattern ?? {}).map(
-          ([key, pattern]) => this.renderPatternButton(key, pattern),
+        ${Object.entries(filteredPatterns).map(([key, pattern]) =>
+          this.renderPatternButton(key, pattern),
         )}
       </div>
     `;
