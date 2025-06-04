@@ -160,6 +160,31 @@ export class TerritoryPatternsModal extends LitElement {
         class="flex flex-wrap gap-4 p-2"
         style="justify-content: center; align-items: flex-start;"
       >
+        <button
+          class="border p-2 rounded-lg shadow text-black dark:text-white text-left
+          ${this.selectedPattern === null
+            ? "bg-blue-500 text-white"
+            : "bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700"}"
+          style="flex: 0 1 calc(25% - 1rem); max-width: calc(25% - 1rem);"
+          @click=${() => this.selectPattern(null)}
+        >
+          <div class="text-sm font-bold mb-1">Default</div>
+          <div
+            class="preview-container"
+            style="
+              width: 100%;
+              aspect-ratio: 1;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: #fff;
+              border-radius: 8px;
+              overflow: hidden;
+            "
+          >
+            ${this.renderBlankPreview(this.buttonWidth, this.buttonWidth)}
+          </div>
+        </button>
         ${Object.entries(territoryPatterns.pattern ?? {}).map(
           ([key, pattern]) => this.renderPatternButton(key, pattern),
         )}
@@ -186,12 +211,16 @@ export class TerritoryPatternsModal extends LitElement {
     this.modalEl?.close();
   }
 
-  private selectPattern(patternKey: string) {
-    this.selectedPattern = patternKey;
-    setSelectedPattern(patternKey);
-    const base64 = territoryPatterns.pattern[patternKey];
-    if (base64) {
-      setSelectedPatternBase64(base64.pattern);
+  private selectPattern(patternKey: string | null) {
+    this.selectedPattern = patternKey ?? undefined;
+    setSelectedPattern(patternKey ?? "");
+    if (patternKey) {
+      const base64 = territoryPatterns.pattern[patternKey];
+      if (base64) {
+        setSelectedPatternBase64(base64.pattern);
+      }
+    } else {
+      setSelectedPatternBase64("");
     }
     this.updatePreview();
     this.close();
