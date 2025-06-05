@@ -335,8 +335,16 @@ export function startWorker() {
             }
 
             if (clientMsg.pattern !== undefined) {
-              const checker = getPrivilegeChecker();
-              if (!checker.isPatternAllowed(clientMsg.pattern, roles ?? [])) {
+              if (roles === undefined) {
+                log.warn("pattern blocked (no roles)");
+                return;
+              }
+              if (
+                !getPrivilegeChecker().isPatternAllowed(
+                  clientMsg.pattern,
+                  roles,
+                )
+              ) {
                 log.warn(
                   `pattern blocked (restricted or unlisted): ${clientMsg.pattern}`,
                 );

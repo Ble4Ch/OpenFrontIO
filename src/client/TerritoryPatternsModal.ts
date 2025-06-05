@@ -83,6 +83,10 @@ export class TerritoryPatternsModal extends LitElement {
       const roleGroup: string[] | string | undefined = patternData.role_group;
 
       if (!roleGroup || (Array.isArray(roleGroup) && roleGroup.length === 0)) {
+        if (roles.length === 0) {
+          const reason = "You must be logged in to access this pattern.";
+          this.setLockedPatterns([key], reason);
+        }
         continue;
       }
 
