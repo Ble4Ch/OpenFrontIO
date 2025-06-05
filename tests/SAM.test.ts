@@ -28,6 +28,7 @@ describe("SAM", () => {
       "defender_id",
     );
     const far_defender_info = new PlayerInfo(
+      undefined,
       "us",
       "far_defender_id",
       PlayerType.Human,
