@@ -59,9 +59,8 @@ export class PatternDecoder {
   }
 
   isSet(x: number, y: number): boolean {
-    const norm = (v: number, mod: number) => (v + mod) % mod;
-    const px = norm(x >> this.scale, this.tileWidth);
-    const py = norm(y >> this.scale, this.tileHeight);
+    const px = (x >> this.scale) % this.tileWidth;
+    const py = (y >> this.scale) % this.tileHeight;
     const idx = py * this.tileWidth + px;
     const byteIndex = idx >> 3;
     const bitIndex = idx & 7;
