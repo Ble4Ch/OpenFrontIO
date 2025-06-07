@@ -1,23 +1,12 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const territory_patterns = require("../../resources/cosmetic/cosmetic.json");
+import { Cosmetic } from "../core/Schemas";
+import { territoryPatterns } from "../core/Util";
 
-type RoleGroups = Record<string, string[]>;
-type PatternEntry = {
-  pattern: string;
-  role_group: string[];
-};
-type TerritoryPatterns = {
-  role_groups: RoleGroups;
-  pattern: Record<string, PatternEntry>;
-};
-
-const patternData = territory_patterns as TerritoryPatterns;
+const patternData = territoryPatterns as Cosmetic;
 
 export class PrivilegeChecker {
-  private patternData: TerritoryPatterns;
+  private patternData: Cosmetic;
 
-  constructor(patternData: TerritoryPatterns) {
+  constructor(patternData: Cosmetic) {
     this.patternData = patternData;
   }
 
@@ -28,7 +17,7 @@ export class PrivilegeChecker {
 
     if (!found) {
       // fallback to staff privilege check
-      const staffRoles = this.patternData.role_groups["staff"] || [];
+      const staffRoles = this.patternData.role_group?.["staff"] || [];
       return roleIDs.some((role) => staffRoles.includes(role));
     }
 
@@ -40,7 +29,7 @@ export class PrivilegeChecker {
     }
 
     for (const groupName of allowedGroups) {
-      const groupRoles = this.patternData.role_groups[groupName] || [];
+      const groupRoles = this.patternData.role_group?.[groupName] || [];
       if (roleIDs.some((role) => groupRoles.includes(role))) {
         return true;
       }

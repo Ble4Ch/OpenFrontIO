@@ -2,6 +2,7 @@ import type { TemplateResult } from "lit";
 import { html, LitElement, render } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { UserMeResponse } from "../core/ApiSchemas";
+import { territoryPatterns } from "../core/Util";
 import "./components/Difficulties";
 import "./components/Maps";
 import {
@@ -9,7 +10,6 @@ import {
   PatternDecoder,
   setSelectedPattern,
   setSelectedPatternBase64,
-  territoryPatterns,
 } from "./Cosmetic";
 
 @customElement("territory-patterns-modal")
