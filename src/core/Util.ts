@@ -1,11 +1,9 @@
 import DOMPurify from "dompurify";
 import { customAlphabet } from "nanoid";
 import twemoji from "twemoji";
-import rawTerritoryPatterns from "../../resources/cosmetic/cosmetic.json" with { type: "json" };
 import { Cell, Unit } from "./game/Game";
 import { GameMap, TileRef } from "./game/GameMap";
 import {
-  CosmeticsSchema,
   GameConfig,
   GameID,
   GameRecord,
@@ -317,5 +315,3 @@ export const flattenedEmojiTable: string[] = emojiTable.flat();
 export function replacer(_key: string, value: any): any {
   return typeof value === "bigint" ? value.toString() : value;
 }
-
-export const territoryPatterns = CosmeticsSchema.parse(rawTerritoryPatterns);
